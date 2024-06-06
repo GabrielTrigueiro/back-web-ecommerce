@@ -1,7 +1,5 @@
-const userModel = require('../models/userModel');
-
 const checkRequiredFieldsToRegister = (req, res, next) => {
-  const requiredFields = ['email', 'password', 'name', 'cpf', 'street', 'city', 'state', 'zip_code', 'user_type'];
+  const requiredFields = ['valor_total', 'cliente_id', 'indicacao_id', 'num_parcelas'];
   const missingFields = [];
 
   requiredFields.forEach(field => {
@@ -19,26 +17,6 @@ const checkRequiredFieldsToRegister = (req, res, next) => {
   next();
 };
 
-const checkUserExists = async (req, res, next) => {
-  const { email, cpf } = req.body;
-
-  try {
-    const existingField = await userModel.checkIfUserExists(email, cpf);
-
-    if (existingField) {
-      return res.status(400).json({
-        error: `O campo ${existingField} já está em uso.`
-      });
-    }
-
-    next();
-  } catch (err) {
-    console.error('Erro ao verificar existência do usuário', err);
-    res.status(500).send('Erro ao verificar existência do usuário');
-  }
-};
-
 module.exports = {
-  checkRequiredFieldsToRegister,
-  checkUserExists
+  checkRequiredFieldsToRegister
 };

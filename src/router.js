@@ -8,8 +8,8 @@ const userMiddleware = require('./middlewares/userMiddleware')
 const productController = require('./controllers/productController');
 const productMiddleware = require('./middlewares/productMiddleware');
 
-// const saleController = require('./controllers/saleController');
-// const saleMiddleware = require('./middlewares/saleMiddleware');
+const saleController = require('./controllers/saleController');
+const saleMiddleware = require('./middlewares/saleMiddleware');
 
 const indicationController = require('./controllers/indicationController');
 const indicationMiddleware = require('./middlewares/indicationMiddleware');
@@ -29,7 +29,7 @@ router.get('/indication', indicationController.getAll);
 router.post('/registerIndication', indicationMiddleware.checkRequiredFieldsToRegister, indicationMiddleware.checkIndicationExists, indicationController.createIndication);
 
 // compra
-// router.get('/sale/:id', saleController.getAll);
-// router.post('/newSale', saleMiddleware.checkRequiredFieldsToRegister, productController.createProcut);
+router.get('/sale/:userId', saleController.getAllByUserId);
+router.post('/newSale', saleMiddleware.checkRequiredFieldsToRegister, saleController.makeSale);
 
 module.exports = router;
