@@ -41,12 +41,6 @@ const createUser = async (user) => {
   }
 };
 
-const deleteTask = async (id) => {
-  const query = 'DELETE FROM tasks WHERE id = $1 RETURNING *';
-  const { rows } = await connection.query(query, [id]);
-  return rows[0];
-};
-
 // Função para atualizar um usuário
 const updateUser = async (id, user) => {
   const { email, password, name, cpf, street, city, state, zip_code, user_type } = user;
@@ -67,7 +61,6 @@ const updateUser = async (id, user) => {
 module.exports = {
   getAll,
   createUser,
-  deleteTask,
   updateUser,
   checkIfUserExists
 };

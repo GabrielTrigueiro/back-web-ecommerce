@@ -12,7 +12,6 @@ const createUser = async (request, response) => {
 
 const deleteTask = async (request, response) => {
   const { id } = request.params;
-
   await userModel.deleteTask(id);
   return response.status(204).json();
 };
