@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 const authController = require('./controllers/authController');
+const authMiddleware = require('./middlewares/authMiddleware');
 
 const userController = require('./controllers/userController');
 const userMiddleware = require('./middlewares/userMiddleware')
@@ -21,7 +22,7 @@ const indicationMiddleware = require('./middlewares/indicationMiddleware');
 router.post('/login', authController.login)
 
 // usuarios
-router.get('/user', userController.getAll);
+router.get('/user', authMiddleware.authenticateToken, userController.getAll);
 router.post('/registerUser', userMiddleware.checkRequiredFieldsToRegister, userMiddleware.checkUserExists, userController.createUser);
 router.put('/updateUser/:id', userMiddleware.checkRequiredFieldsToRegister, userController.updateUser);
 

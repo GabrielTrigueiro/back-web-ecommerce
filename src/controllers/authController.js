@@ -2,11 +2,11 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const userModel = require('../models/userModel');
 
-const secretKey = 'your_secret_key';
+const secretKey = process.env.SECRET_KEY;
 
 const login = async (req, res) => {
     const { email, password } = req.body;
-  
+    console.log('seu secret:', secretKey);
     try {
       const user = await userModel.findUserByEmail(email);
   
