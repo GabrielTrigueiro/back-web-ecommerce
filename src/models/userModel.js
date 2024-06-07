@@ -1,4 +1,5 @@
 const connection = require('./connection');
+const bcrypt = require('bcrypt');
 
 // validações
 
@@ -22,7 +23,7 @@ const checkIfUserExists = async (email, cpf) => {
 };
 
 const getAll = async () => {
-  const { rows } = await connection.query('SELECT * FROM public.user'); // PostgreSQL usa query
+  const { rows } = await connection.query('SELECT * FROM public.user');
   return rows;
 };
 
@@ -30,9 +31,10 @@ const getAll = async () => {
 const createUser = async (user) => {
   const { email, password, name, cpf, street, city, state, zip_code, user_type } = user;
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
     const result = await connection.query(
       'INSERT INTO public."user" (email, password, name, cpf, street, city, state, zip_code, user_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
-      [email, password, name, cpf, street, city, state, zip_code, user_type]
+      [email, hashedPassword, name, cpf, street, city, state, zip_code, user_type]
     );
     return result.rows[0];
   } catch (err) {
@@ -58,9 +60,23 @@ const updateUser = async (id, user) => {
   }
 };
 
+const findUserByEmail = async (email) => {
+  try {
+    const result = await connection.query(
+      'SELECT * FROM public."user" WHERE email = $1',
+      [email]
+    );
+    return result.rows[0];
+  } catch (err) {
+    console.error('Erro ao buscar usuário pelo email', err);
+    throw err;
+  }
+};
+
 module.exports = {
   getAll,
   createUser,
   updateUser,
-  checkIfUserExists
+  checkIfUserExists,
+  findUserByEmail
 };

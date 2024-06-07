@@ -2,6 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
+const authController = require('./controllers/authController');
+
 const userController = require('./controllers/userController');
 const userMiddleware = require('./middlewares/userMiddleware')
 
@@ -13,6 +15,10 @@ const saleMiddleware = require('./middlewares/saleMiddleware');
 
 const indicationController = require('./controllers/indicationController');
 const indicationMiddleware = require('./middlewares/indicationMiddleware');
+
+// login
+
+router.post('/login', authController.login)
 
 // usuarios
 router.get('/user', userController.getAll);
