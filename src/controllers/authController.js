@@ -6,6 +6,7 @@ const secretKey = process.env.SECRET_KEY;
 
 const login = async (req, res) => {
     const { email, password } = req.body;
+    console.log('seu email:', email, 'sua senha:', password);
     console.log('seu secret:', secretKey);
     try {
       const user = await userModel.findUserByEmail(email);

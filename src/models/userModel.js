@@ -47,11 +47,13 @@ const createUser = async (user) => {
 const updateUser = async (id, user) => {
   const { email, password, name, cpf, street, city, state, zip_code, user_type } = user;
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log('senha alterada', hashedPassword);
     const result = await connection.query(
       `UPDATE public."user" 
        SET email = $1, password = $2, name = $3, cpf = $4, street = $5, city = $6, state = $7, zip_code = $8, user_type = $9 
        WHERE id = $10 RETURNING *`,
-      [email, password, name, cpf, street, city, state, zip_code, user_type, id]
+      [email, hashedPassword, name, cpf, street, city, state, zip_code, user_type, id]
     );
     return result.rows[0];
   } catch (err) {

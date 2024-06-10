@@ -22,12 +22,12 @@ const indicationMiddleware = require('./middlewares/indicationMiddleware');
 router.post('/login', authController.login)
 
 // usuarios
-router.get('/user', authMiddleware.authenticateToken, userController.getAll);
-router.post('/registerUser', authMiddleware.authenticateToken, userMiddleware.checkRequiredFieldsToRegister, userMiddleware.checkUserExists, userController.createUser);
+router.get('/user', userController.getAll);
+router.post('/registerUser', userMiddleware.checkRequiredFieldsToRegister, userMiddleware.checkUserExists, userController.createUser);
 router.put('/updateUser/:id', authMiddleware.authenticateToken, userMiddleware.checkRequiredFieldsToRegister, userController.updateUser);
 
 // produtos
-router.get('/product', authMiddleware.authenticateToken, productController.getAll);
+router.get('/product', productController.getAll);
 router.post('/registerProduct', authMiddleware.authenticateToken, productMiddleware.checkRequiredFieldsToRegister, productController.createProcut);
 router.put('/updateProduct/:id', authMiddleware.authenticateToken, productMiddleware.checkRequiredFieldsToRegister, productController.updateProduct);
 

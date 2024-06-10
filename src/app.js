@@ -3,8 +3,13 @@ const router = require('./router');
 const fs = require('fs');
 const path = require('path');
 const app = express();
+const cors = require('cors');
 
 app.use(express.json({ limit: '50mb' }));
+
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
 app.use(router);
 
