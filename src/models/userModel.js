@@ -1,63 +1,112 @@
-const connection = require('./connection');
-const bcrypt = require('bcrypt');
+const connection = require("./connection");
+const bcrypt = require("bcrypt");
 
 // validações
 
 // Função para verificar se o email ou cpf já existem
 const checkIfUserExists = async (email, cpf) => {
   try {
-    const emailResult = await connection.query('SELECT id FROM public."user" WHERE email = $1', [email]);
-    const cpfResult = await connection.query('SELECT id FROM public."user" WHERE cpf = $1', [cpf]);
+    const emailResult = await connection.query(
+      'SELECT id FROM public."user" WHERE email = $1',
+      [email]
+    );
+    const cpfResult = await connection.query(
+      'SELECT id FROM public."user" WHERE cpf = $1',
+      [cpf]
+    );
+
+    console.log(email, emailResult.rows);
 
     if (emailResult.rows.length > 0) {
-      return 'email';
+      return "email";
     } else if (cpfResult.rows.length > 0) {
-      return 'cpf';
+      return "cpf";
     } else {
       return null;
     }
   } catch (err) {
-    console.error('Erro ao verificar existência do usuário', err);
+    console.error("Erro ao verificar existência do usuário", err);
     throw err;
   }
 };
 
 const getAll = async () => {
-  const { rows } = await connection.query('SELECT * FROM public.user');
+  const { rows } = await connection.query("SELECT * FROM public.user");
   return rows;
 };
 
 // Função para criar um novo usuário
 const createUser = async (user) => {
-  const { email, password, name, cpf, street, city, state, zip_code, user_type } = user;
+  const {
+    email,
+    password,
+    name,
+    cpf,
+    street,
+    city,
+    state,
+    zip_code,
+    user_type,
+  } = user;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = await connection.query(
       'INSERT INTO public."user" (email, password, name, cpf, street, city, state, zip_code, user_type) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
-      [email, hashedPassword, name, cpf, street, city, state, zip_code, user_type]
+      [
+        email,
+        hashedPassword,
+        name,
+        cpf,
+        street,
+        city,
+        state,
+        zip_code,
+        user_type,
+      ]
     );
     return result.rows[0];
   } catch (err) {
-    console.error('Erro ao criar usuário', err);
+    console.error("Erro ao criar usuário", err);
     throw err;
   }
 };
 
 // Função para atualizar um usuário
 const updateUser = async (id, user) => {
-  const { email, password, name, cpf, street, city, state, zip_code, user_type } = user;
+  const {
+    email,
+    password,
+    name,
+    cpf,
+    street,
+    city,
+    state,
+    zip_code,
+    user_type,
+  } = user;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log('senha alterada', hashedPassword);
+    console.log("senha alterada", hashedPassword);
     const result = await connection.query(
       `UPDATE public."user" 
        SET email = $1, password = $2, name = $3, cpf = $4, street = $5, city = $6, state = $7, zip_code = $8, user_type = $9 
        WHERE id = $10 RETURNING *`,
-      [email, hashedPassword, name, cpf, street, city, state, zip_code, user_type, id]
+      [
+        email,
+        hashedPassword,
+        name,
+        cpf,
+        street,
+        city,
+        state,
+        zip_code,
+        user_type,
+        id,
+      ]
     );
     return result.rows[0];
   } catch (err) {
-    console.error('Erro ao atualizar usuário', err);
+    console.error("Erro ao atualizar usuário", err);
     throw err;
   }
 };
@@ -70,7 +119,7 @@ const findUserByEmail = async (email) => {
     );
     return result.rows[0];
   } catch (err) {
-    console.error('Erro ao buscar usuário pelo email', err);
+    console.error("Erro ao buscar usuário pelo email", err);
     throw err;
   }
 };
@@ -80,5 +129,5 @@ module.exports = {
   createUser,
   updateUser,
   checkIfUserExists,
-  findUserByEmail
+  findUserByEmail,
 };

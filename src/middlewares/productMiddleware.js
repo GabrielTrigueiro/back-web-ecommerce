@@ -1,8 +1,15 @@
 const checkRequiredFieldsToRegister = (req, res, next) => {
-  const requiredFields = ['nome', 'descricao', 'preco', 'estoque', 'img'];
+  const requiredFields = [
+    "nome",
+    "descricao",
+    "preco",
+    "estoque",
+    "img",
+    "categoria",
+  ];
   const missingFields = [];
 
-  requiredFields.forEach(field => {
+  requiredFields.forEach((field) => {
     if (!req.body[field]) {
       missingFields.push(field);
     }
@@ -10,7 +17,7 @@ const checkRequiredFieldsToRegister = (req, res, next) => {
 
   if (missingFields.length > 0) {
     return res.status(400).json({
-      error: `Campos obrigatórios ausentes: ${missingFields.join(', ')}`
+      error: `Campos obrigatórios ausentes: ${missingFields.join(", ")}`,
     });
   }
 
