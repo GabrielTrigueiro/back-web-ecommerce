@@ -33,10 +33,11 @@ router.put('/updateProduct/:id', authMiddleware.authenticateToken, productMiddle
 
 // indicacao
 router.get('/indication', authMiddleware.authenticateToken, indicationController.getAll);
+router.get('/indication/:codigo', authMiddleware.authenticateToken, indicationController.getByCode);
 router.post('/registerIndication', authMiddleware.authenticateToken, indicationMiddleware.checkRequiredFieldsToRegister, indicationMiddleware.checkIndicationExists, indicationController.createIndication);
 
 // compra
 router.get('/sale/:userId', authMiddleware.authenticateToken, saleController.getAllByUserId);
-router.post('/newSale', authMiddleware.authenticateToken, saleMiddleware.checkRequiredFieldsToRegister, saleController.makeSale);
+router.post('/newSale', authMiddleware.authenticateToken, saleController.makeSale);
 
 module.exports = router;
